@@ -83,7 +83,7 @@ def model_fn(model_dir):
     
   
     print(model_dir+'/'+model_version_seg)
-    if os.path.isfile(model_dir+'/Segm-Image-Encoding/'+model_version_seg):
+    if os.path.isfile(model_dir+'/Segm-Image-Encoding-three-scale/'+model_version_seg):
         print('path is valid')
     else:
         print('path is not valid')
@@ -224,13 +224,14 @@ def predict_fn(input_object, model):
     
     with torch.no_grad():
         scores = torch.zeros(1, 92, segSize[0], segSize[1])
-        #scores = async_copy_to(scores, 0)
+        if torch.cuda.is_available():
+            scores = async_copy_to(scores, 0)
         img_resized_list = input_object['img_data']
         for img in img_resized_list:
             feed_dict = {}
             feed_dict['img_data'] = img
-            
-            #feed_dict = async_copy_to(feed_dict, 0)
+            if torch.cuda.is_available():
+                feed_dict = async_copy_to(feed_dict, 0)
             
             # forward pass
             pred_tmp = model(feed_dict, segSize=segSize)
