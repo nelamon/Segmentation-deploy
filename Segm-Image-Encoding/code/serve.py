@@ -83,7 +83,7 @@ def model_fn(model_dir):
     
   
     print(model_dir+'/'+model_version_seg)
-    if os.path.isfile(model_dir+'/Segm-Image-Encoding-three-scale/'+model_version_seg):
+    if os.path.isfile(model_dir+'/Segm-Image-Encoding/'+model_version_seg):
         print('path is valid')
     else:
         print('path is not valid')
