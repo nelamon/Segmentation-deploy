@@ -31,6 +31,7 @@ from serve import output_fn
 
 
 '''
+########################### Test locally #################################
 model_dir = './model'
 #model_enc = model_fn_enc(model_dir)
 #model_dec = model_fn_dec(model_dir)
@@ -51,6 +52,7 @@ print('elapsed:', time.time()-s_time)
 
 '''
 '''
+########################### Upload .tar.gz file to s3 bucket #################################
 import sagemaker
 from sagemaker.utils import name_from_base
 sagemaker_session = sagemaker.Session()
@@ -62,6 +64,7 @@ model_artefact = sagemaker_session.upload_data(path=str('Segm-Image-Encoding.tar
 print(model_artefact)
 '''
 
+########################### Deploy to endpoint #################################
 import sagemaker
 #!!!need to remove endpoint configuration and model to update a new model
 model_artefact = "s3://sagemaker-us-east-1-149465543054/sagemaker/image-segmentation/Segm-Image-Encoding.tar.gz"
@@ -78,24 +81,24 @@ model=PyTorchModel(model_data=model_artefact, name="segmentation-nirmal-cpu-test
 model=model.deploy(initial_instance_count=1, instance_type='ml.c5.4xlarge', update_endpoint=False)
 
 
-
 '''
+########################### Invoke a deployed endpoint and valide it #################################
 JSON_CONTENT_TYPE = 'application/json'
 request = {}
-request['url'] = 'https://compass-beta-classification-human-label.s3.amazonaws.com/labels/kitchen/495620428c37cd3136e4e1592390bb01d4eaeb0d_original.jpg'
+request['url'] = 'https://compass-beta-classification-human-label.s3.amazonaws.com/labels/kitchen/00650540fab15bf8b70296f7dd575c54264a89be_original.jpg'
 #request['url'] = 'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg'
 request['encoding'] = True
 #image = input_fn(json.dumps(request),JSON_CONTENT_TYPE)
 
 
 # grab environment variables
-ENDPOINT_NAME = 'segmentation-nirmal-cpu-test-2020-10-30-06-38-26-091'
+ENDPOINT_NAME = 'segmentation-nirmal-cpu-test-2020-10-30-17-23-20-126'
 
 from sagemaker.predictor import RealTimePredictor
 
 #predictor = RealTimePredictor(endpoint_name=ENDPOINT_NAME)
 #result = predictor.predict(json.dumps(request))
-
+'''
 
 
 
@@ -105,6 +108,6 @@ response = runtime_client.invoke_endpoint(EndpointName = ENDPOINT_NAME ,
                                          ContentType = JSON_CONTENT_TYPE,
                                          Body = json.dumps(request))
 
-'''
+
 
 
