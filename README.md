@@ -20,3 +20,4 @@ sourcedir/\
 &nbsp;&nbsp;&nbsp;&nbsp;|- requirements.txt 
 
 
+While deploying it, copy the model file (.pth) to 'Segm-Image-Encoding' folder
